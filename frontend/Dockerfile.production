@@ -1,0 +1,26 @@
+FROM node:16-slim AS builder
+
+WORKDIR /usr/src/app
+
+COPY ./package*.json ./
+
+RUN npm install --only=prod
+
+COPY . .
+
+ENV REACT_APP_ENV=prod
+
+RUN npm run build
+
+# Copy into secondary Caddy stage
+
+FROM caddy:2.4.6-alpine
+
+ARG CADDYFILE
+COPY $CADDYFILE /etc/caddy/Caddyfile
+
+COPY --from=builder /usr/src/app/build/ /srv
+
+EXPOSE 80
+
+EXPOSE 443

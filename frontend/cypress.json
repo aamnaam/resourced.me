@@ -1,0 +1,13 @@
+{
+	"baseUrl": "http://localhost:3000/",
+	"experimentalStudio": true,
+	"env": {
+        "homepageRoute": "/",
+		"privPolicyRoute": "/privacypolicy",
+		"createListRoute": "/create",
+        "testListId": "623cfa1cb8dfcf7ea28f7253",
+        "testListSection": "MERN Stack Basics",
+        "testListResource": "API endpoints"
+	},
+	"videoRecording": false
+}

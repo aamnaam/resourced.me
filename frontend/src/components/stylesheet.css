@@ -1,0 +1,470 @@
+body {
+	font-family: "Comic Sans MS", "Balsamiq Sans";
+}
+
+/*----------Homepage----------*/
+
+.home {
+	text-align: center;
+	display: grid;
+	max-width: 1500px;
+	margin: auto;
+	padding-top: 60px;
+}
+
+.insideHome {
+	display: flex;
+}
+
+.leftColumn {
+	float: left;
+	width: 40%;
+	text-align: center;
+	display: grid;
+	padding-right: 60px;
+	margin-right: 60px;
+}
+
+.rightColumn {
+	text-align: center;
+	display: grid;
+}
+
+.headerHome {
+	margin-bottom: 15px;
+	display: flex;
+	align-items: center;
+	margin: auto;
+}
+
+.logo {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.logoImage {
+	height: 70px;
+	width: 70px;
+	float: left;
+	margin-right: 10px;
+}
+
+.logoText {
+	float: right;
+	margin-left: 10px;
+	font-size: 40px;
+}
+
+.intro {
+	margin-top: 110px;
+}
+
+.text {
+	text-align: center;
+	font-size: 18px;
+	margin-bottom: 60px;
+}
+
+.sampleText {
+	margin-top: 40px;
+	text-align: justify;
+}
+
+.introBullets {
+	text-align: left;
+}
+
+.googleBtnOverview {
+	margin: auto;
+}
+
+.googleBtn {
+	display: flex !important;
+	align-items: center !important;
+	margin: auto;
+}
+
+.googleLogo {
+	height: 26px;
+	margin-right: 16px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.googleText {
+	font-family: "Balsamiq Sans" !important;
+	margin: auto;
+}
+
+.space {
+	height: 10px;
+}
+
+.space2 {
+	height: 10px;
+}
+
+.privPolLink:link {
+	text-decoration: none;
+}
+
+.privPolLink:active {
+	text-decoration: none;
+}
+
+.privPolLink:hover {
+	text-decoration: none;
+}
+
+.privPolLink:visited {
+	text-decoration: none;
+}
+
+.search {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-top: 15px;
+	padding-bottom: 30px;
+	margin-bottom: 40px;
+}
+
+.inputTextField {
+	width: 100%;
+	padding-right: 15px;
+}
+
+.searchResults {
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	border-radius: 3px;
+	margin-bottom: 30px;
+	height: 627px;
+}
+
+.resultsText {
+	width: 80px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: -15px;
+	background: white;
+}
+
+.searchResultsScroll {
+	height: 600px;
+	padding-right: 20px;
+	padding-left: 20px;
+	padding-bottom: 0px;
+	overflow: scroll;
+}
+
+.resourceListResult {
+	display: flex;
+	border: 2px solid rgba(0, 0, 0, 1);
+	border-radius: 2px;
+	margin-bottom: 20px;
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	align-items: center;
+}
+
+.resourceListResultText {
+	float: left;
+	width: 100%;
+	text-align: left;
+	margin-right: 20px;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.resourceListResultButtons {
+	text-align: center;
+	display: grid;
+	width: 16%;
+}
+
+.copyLinkBtn {
+	margin-bottom: 10px;
+}
+
+.copyLinkBtn:active {
+	transform: scale(1.04);
+	background-color: #4BB543 !important;
+	transition: 0.01s ease-in-out;
+}
+
+/*----------CreateList----------*/
+
+.createListOverall {
+	padding-top: 60px;
+	padding-bottom: 40px;
+	max-width: 800px;
+	margin: auto;
+	justify-content: center;
+}
+
+@media only screen and (max-width: 800px) {
+	.createListOverall {
+		max-width: 90%;
+		margin: auto;
+		justify-content: center;
+	}
+	.logoImage {
+		height: 50px !important;
+		width: 50px !important;
+	}
+	.logoText {
+		font-size: 28px !important;
+	}
+	.buttonDLCreateList {
+		size: md !important;
+	}
+}
+
+.lineCreateList {
+	width: 90%;
+	margin: auto;
+}
+
+.header {
+	margin-bottom: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.logoCreateList {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-left: 10px;
+}
+
+.BLOO:link {
+	color: black !important;
+}
+
+.BLOO:visited {
+	color: black !important;
+}
+
+.BLOO:active {
+	color: black !important;
+}
+
+.BLOO:hover {
+	color: black !important;
+}
+
+.buttonCL {
+	font-family: "Comic Sans MS";
+	padding-bottom: 20px;
+}
+
+.bodyCreateList {
+	padding-left: 60px;
+	padding-top: 25px;
+}
+
+.createList {
+	margin-bottom: 30px;
+	border: 2px solid black;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.addBtn {
+	width: 25px !important;
+	height: 25px !important;
+	border-radius: 100% !important;
+	font-size: 28px !important;
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+	position: relative !important;
+	vertical-align: top !important;
+	padding-top: 0px !important;
+	margin-right: 10px;
+}
+
+.minusBtn {
+	width: 25px !important;
+	height: 25px !important;
+	border-radius: 100% !important;
+	font-size: 30px !important;
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+	position: relative !important;
+	vertical-align: top !important;
+	padding-top: 0px !important;
+	margin-right: 10px;
+}
+
+.sectionWithButton {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.addSection {
+	display: flex;
+	align-items: center;
+}
+
+.addResource {
+	margin-top: 10px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.removeResource {
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.btnSideText {
+	margin-bottom: 0px;
+}
+
+.removeSection {
+	display: flex;
+	align-items: center;
+}
+
+.sectionButtons {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 25px;
+	margin-bottom: 10px;
+}
+
+.resourceButtons {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 15px;
+}
+
+.resourceBreak {
+	margin-top: 15px;
+	margin-bottom: 5px;
+}
+
+/*----------DisplayList----------*/
+
+.displayList {
+	padding-top: 60px;
+	padding-bottom: 60px;
+	text-align: left;
+	display: grid;
+	margin: auto;
+	max-width: 800px;
+	justify-content: center;
+}
+
+.dlBox {
+	min-width: 800px;
+}
+
+.logoCentre {
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.buttonDL {
+	padding: 10px;
+}
+
+.buttonDLCreateList {
+	margin-top: -6px;
+	margin-right: 10px;
+}
+
+.multipleButtons {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+
+.listPageCopyLinkBtn:active {
+	transform: scale(1.04);
+	background-color: #4BB543 !important;
+	transition: 0.01s ease-in-out;
+}
+
+/*----------PrivacyPolicy----------*/
+
+.privacyPolicy {
+	padding-top: 60px;
+	max-width: 800px;
+	margin: auto;
+	padding-bottom: 60px;
+}
+
+.section {
+	margin-top: 15px;
+	border: 2px solid black;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+
+.noBullets {
+	list-style-type: none;
+	padding: 0px;
+}
+
+.headerPrivacyPolicy {
+	margin-bottom: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.privPolText {
+	margin-top: 40px;
+}
+
+
+/*idk atm*/
+.line {
+	margin: 5px;
+}
+
+.hrCustom {
+	margin-top: -5px;
+	margin-bottom: -5px;
+}
+
+.footer {
+	display: flex;
+	justify-content: space-between;
+}
+
+.footerCL {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 40px;
+}
+
+.privacyPolicyText {
+	margin-top: 50px;
+}
+
+/*----------Resource----------*/
+
+.resourceDesc {
+	margin-bottom: 0px;
+}
+

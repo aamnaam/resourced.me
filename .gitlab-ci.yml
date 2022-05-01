@@ -1,0 +1,62 @@
+image: node:16
+
+variables:
+  FF_USE_FASTZIP: "true"
+  ARTIFACT_COMPRESSION_LEVEL: "fast"
+  CACHE_COMPRESSION_LEVEL: "fast"
+  GIT_DEPTH: 10
+  DB_USER: $DB_USER
+  DB_PW: $DB_PW
+  DB: "mongodb+srv://$DB_USER:$DB_PW@cluster0.uobww.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+  ACCESS_TOKEN_SECRET: $ACCESS_TOKEN_SECRET
+  REFRESH_TOKEN_SECRET: $REFRESH_TOKEN_SECRET
+
+stages:
+  - test
+  - deploy
+
+backend-test:
+  stage: test
+  script: 
+    - cd backend/
+    - npm ci --prefer-offline
+    - npm run test
+  cache:
+    key:
+      files:
+        - backend/package-lock.json
+    paths:
+      - backend/node_modules/
+
+frontend-test:
+  stage: test
+  script: 
+    - cd frontend/
+    - npm ci --prefer-offline
+    - npm run test
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+    paths:
+      - frontend/node_modules/
+
+deploy-job:
+  stage: deploy 
+  before_script:
+    - apt update
+    - apt install -y ssh
+  script:
+    - chmod 600 $SSH_KEY
+    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no root@resourced.me "cd /app && docker-compose -f docker-compose-prod.yaml down && rm -rf /app" || true
+    - printf "DB='$DB'\nGOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID\nACCESS_TOKEN_SECRET=$ACCESS_TOKEN_SECRET\nREFRESH_TOKEN_SECRET=$REFRESH_TOKEN_SECRET" > backend/.env
+    - printf "REACT_APP_GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" > frontend/.env
+    
+    - scp -i $SSH_KEY -o StrictHostKeyChecking=no -r $PWD/ root@resourced.me:/app
+    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no root@resourced.me "cd /app && make build-production && make run-production"
+  dependencies: []
+  cache: []
+  only:
+    - master
+  
