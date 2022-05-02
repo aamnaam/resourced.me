@@ -106,7 +106,7 @@ const Homepage = () => {
 								<br />
 								<div className="buttonDL">
 									<Link to="/create">
-										<Button id="to-create-list" variant="dark" size="lg">
+										<Button id="to-create-list" variant="dark" size="md">
 											Create a List
 										</Button>{" "}
 									</Link>

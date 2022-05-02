@@ -24,20 +24,25 @@ router.route("/search").get((req, res) => {
 
 	let searchParams = {};
 	if (module) {
-		searchParams = { ...searchParams, module: { $regex: module, $options: 'i' } };
+		searchParams = {
+			...searchParams,
+			module: { $regex: module, $options: "i" },
+		};
 	}
 	if (course) {
-		searchParams = { ...searchParams, course: { $regex: course,  $options: 'i'  } };
+		searchParams = {
+			...searchParams,
+			course: { $regex: course, $options: "i" },
+		};
 	}
 	if (university) {
 		searchParams = {
 			...searchParams,
-			university: { $regex: university, $options: 'i' },
+			university: { $regex: university, $options: "i" },
 		};
 	}
 
-	ResourceList
-		.find(searchParams)
+	ResourceList.find(searchParams)
 		.select("module course university description")
 		.exec()
 		.then((lists) => res.json(lists))
@@ -87,6 +92,27 @@ router.route("/create").post(authenticateToken, (req, res) => {
 		.save()
 		.then((resouceList) => res.json(resouceList))
 		.catch((err) => res.status(400).json("Error: " + err));
+});
+
+router.route("/:id").put(authenticateToken, async (req, res) => {
+	try {
+		const savedResourceList = await ResourceList.findById(req.params.id);
+		if (req._id !== savedResourceList.author.toString()) {
+			return res.sendStatus(403);
+		}
+		savedResourceList.module = req.body.module;
+		savedResourceList.university = req.body.university;
+		savedResourceList.course = req.body.course;
+		savedResourceList.description = req.body.description;
+		savedResourceList.sections = req.body.sections;
+
+		const updatedResourceList = new ResourceList(savedResourceList);
+		await updatedResourceList.save();
+		res.sendStatus(202);
+	} catch (err) {
+		console.log(err);
+		return res.sendStatus(500);
+	}
 });
 
 module.exports = router;

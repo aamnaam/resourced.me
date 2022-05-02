@@ -2,6 +2,7 @@ import React from "react";
 import { useState, createContext } from "react";
 import Homepage from "./components/Homepage";
 import CreateList from "./components/CreateList";
+import EditList from "./components/EditList";
 import DisplayList from "./components/DisplayList";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -47,6 +48,7 @@ function App() {
 					<Routes>
 						<Route exact path="/" element={<Homepage />} />
 						<Route exact path="/create" element={<CreateList />} />
+						<Route exact path="/edit/:id" element={<EditList />} />
 						<Route
 							exact
 							path="/list/:id"

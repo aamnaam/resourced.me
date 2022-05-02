@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Section from "./Section";
 import { UserContext } from "../App";
@@ -10,6 +10,9 @@ import smile from "../images/smile.png";
 import "./stylesheet.css";
 
 const DisplayList = () => {
+
+	const navigate = useNavigate();
+
 	const env = process.env.REACT_APP_ENV;
 	let HOME_URL = "";
 	if (env === "prod") {
@@ -29,38 +32,48 @@ const DisplayList = () => {
 		sections: [],
 	});
 	const [authorName, setAuthorName] = useState("");
+	const [userIsOwner, setUserIsOwner] = useState(false);
 
 	const sections = list.sections;
-
-	useEffect(async () => {
-		await autoLogin();
-		const res = await axios.get(`/api/list/find/${id}`);
-		setList({
-			author: res.data.author,
-			module: res.data.module,
-			university: res.data.university,
-			course: res.data.course,
-			description: res.data.description,
-			sections: res.data.sections,
-		});
-		document.title = `${res.data.module} • resourced.me`;
-		let authHeaders = null;
-		console.log(user);
-		if (user) {
-			authHeaders = {
-				Authorization: `BEARER ${user.accessToken}`,
-			};
-		}
-		console.log(authHeaders);
-		const res2 = await axios.get(`/api/users/${res.data.author}`, {
-			headers: authHeaders,
-		});
-		const listAuthor = res2.data;
-		setAuthorName(res2.data.name);
+	useEffect(() => {
+		autoLogin();
 	}, []);
+	
+	useEffect(() => {
+		const fetchData = async () => {
+			const res = await axios.get(`/api/list/find/${id}`);
+			setList({
+				author: res.data.author,
+				module: res.data.module,
+				university: res.data.university,
+				course: res.data.course,
+				description: res.data.description,
+				sections: res.data.sections,
+			});
+			document.title = `${res.data.module} • resourced.me`;
+			let authHeaders = null;
+			if (user.name) {
+				authHeaders = {
+					Authorization: `BEARER ${user.accessToken}`,
+				};
+			}
+			const res2 = await axios.get(`/api/users/${res.data.author}`, {
+				headers: authHeaders,
+			});
+			if (user._id === res.data.author) {
+				setUserIsOwner(true);
+			}
+			setAuthorName(res2.data.name);
+		}
+		fetchData();
+	}, [user]);
 
 	const handleCopyLink = () => {
 		navigator.clipboard.writeText(`${HOME_URL}/list/${id}`);
+	};
+
+	const handleEdit = () => {
+		navigate(`../edit/${id}`);
 	};
 
 	return (
@@ -120,6 +133,17 @@ const DisplayList = () => {
 						onClick={handleCopyLink}
 					>
 						Copy Link
+					</Button>
+				</div>
+				<div className="ButtonDL">
+					<Button
+						className="listPageEditBtn"
+						variant="dark"
+						size="lg"
+						disabled={!userIsOwner}
+						onClick={handleEdit}
+					>
+						Edit List
 					</Button>
 				</div>
 			</div>
