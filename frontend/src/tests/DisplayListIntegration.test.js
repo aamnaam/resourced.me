@@ -13,7 +13,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import DisplayList from '../components/DisplayList';
 import Section from '../components/Section';
 import Resource from '../components/Resource';
-
+import { UserContext } from "../App";
 // To mock server functionality
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
@@ -29,7 +29,38 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe('DisplayList, Resource and Section integration test', () => {
-
+    let user = {
+		name: "testUser",
+		email: "test@email.com",
+		picture: "testPicture",
+		accessToken: "token",
+	};
+	const setUser = (name, email, picture, accessToken) => {
+		mockUser.name = name;
+		mockUser.email = email;
+		mockUser.picture = picture;
+		mockUser.accessToken = accessToken;
+	};
+	const autoLogin = async () => {
+		if (user.name) return;
+		try {
+			const res = await axios.post(
+				"/api/auth/token",
+				{},
+				{ withCredentials: true }
+			);
+			if (!res.data.accessToken) return;
+			const decodedToken = jwt_decode(res.data.accessToken);
+			setUser({
+				name: decodedToken.name,
+				email: decodedToken.email,
+				picture: decodedToken.picture,
+				accessToken: res.data.accessToken,
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
     let mock;
 
     beforeAll(() => {
@@ -42,6 +73,7 @@ describe('DisplayList, Resource and Section integration test', () => {
 
     test('Nested Resource and Section components in DisplayList reflect input list', async () => {
         const testList = {
+            author: "1",
             module: "Integration Module",
             university: "University of Tests",
             course: "Integration Testing MSc",
@@ -76,14 +108,27 @@ describe('DisplayList, Resource and Section integration test', () => {
             ]
         };
 
+        const testUser = {
+            _id: 1,
+            name: "testUser",
+            email: null,
+            picture: null,
+            lists: []
+        }
+
         jest.spyOn(Router, 'useParams').mockReturnValue({ id: '1234' });
         mock.onGet("/api/list/find/1234").reply(200, testList);
+        mock.onGet("/api/users/1").reply(200, testUser);
 
         // Doing it this way calls useEffect(). See: https://www.reactjunkie.com/test-react-use-effect-with-enzyme
         let wrapper;
         act(() => {
             wrapper = mount(
-                <MemoryRouter><DisplayList /></MemoryRouter>
+                <MemoryRouter>
+                    <UserContext.Provider value={{ user, setUser, autoLogin }}>
+						<DisplayList />
+                    </UserContext.Provider>
+                </MemoryRouter>
             );
         });
 

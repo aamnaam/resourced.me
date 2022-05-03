@@ -12,6 +12,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 import CreateList from '../components/CreateList';
 import { Button, Form } from "react-bootstrap";
+import { UserContext } from "../App";
 
 // To mock server functionality
 import axios from 'axios';
@@ -21,7 +22,38 @@ enableHooks(jest); // So we can use useEffect in shallow wrappers.
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('CreateList unit test', () => {
-
+    let user = {
+		name: "testUser",
+		email: "test@email.com",
+		picture: "testPicture",
+		accessToken: "token",
+	};
+	const setUser = (name, email, picture, accessToken) => {
+		mockUser.name = name;
+		mockUser.email = email;
+		mockUser.picture = picture;
+		mockUser.accessToken = accessToken;
+	};
+	const autoLogin = async () => {
+		if (user.name) return;
+		try {
+			const res = await axios.post(
+				"/api/auth/token",
+				{},
+				{ withCredentials: true }
+			);
+			if (!res.data.accessToken) return;
+			const decodedToken = jwt_decode(res.data.accessToken);
+			setUser({
+				name: decodedToken.name,
+				email: decodedToken.email,
+				picture: decodedToken.picture,
+				accessToken: res.data.accessToken,
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
     let mock;
 
     beforeAll(() => {
@@ -38,7 +70,11 @@ describe('CreateList unit test', () => {
         let wrapper;
         act(() => {
             wrapper = mount(
-                <MemoryRouter><CreateList /></MemoryRouter>
+                <MemoryRouter>
+                    <UserContext.Provider value={{ user, setUser, autoLogin }}>
+						<CreateList />
+                    </UserContext.Provider>
+                </MemoryRouter>
             );
         });
 
@@ -86,7 +122,11 @@ describe('CreateList unit test', () => {
         let wrapper;
         act(() => {
             wrapper = mount(
-                <MemoryRouter><CreateList /></MemoryRouter>
+                <MemoryRouter>
+                    <UserContext.Provider value={{ user, setUser, autoLogin }}>
+						<CreateList />
+                    </UserContext.Provider>
+                </MemoryRouter>
             );
         });
 
@@ -147,7 +187,11 @@ describe('CreateList unit test', () => {
         let wrapper;
         act(() => {
             wrapper = mount(
-                <MemoryRouter><CreateList /></MemoryRouter>
+                <MemoryRouter>
+                    <UserContext.Provider value={{ user, setUser, autoLogin }}>
+						<CreateList />
+                    </UserContext.Provider>
+                </MemoryRouter>
             );
         });
 
@@ -181,7 +225,11 @@ describe('CreateList unit test', () => {
         let wrapper;
         act(() => {
             wrapper = mount(
-                <MemoryRouter><CreateList /></MemoryRouter>
+                <MemoryRouter>
+                    <UserContext.Provider value={{ user, setUser, autoLogin }}>
+						<CreateList />
+                    </UserContext.Provider>
+                </MemoryRouter>
             );
         });
 

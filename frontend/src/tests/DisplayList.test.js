@@ -12,7 +12,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 import DisplayList from '../components/DisplayList';
 import Section from '../components/Section';
-
+import { UserContext } from "../App";
 // To mock server functionality
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
@@ -27,7 +27,38 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe('DisplayList unit test', () => {
-
+    let user = {
+		name: "testUser",
+		email: "test@email.com",
+		picture: "testPicture",
+		accessToken: "token",
+	};
+	const setUser = (name, email, picture, accessToken) => {
+		mockUser.name = name;
+		mockUser.email = email;
+		mockUser.picture = picture;
+		mockUser.accessToken = accessToken;
+	};
+	const autoLogin = async () => {
+		if (user.name) return;
+		try {
+			const res = await axios.post(
+				"/api/auth/token",
+				{},
+				{ withCredentials: true }
+			);
+			if (!res.data.accessToken) return;
+			const decodedToken = jwt_decode(res.data.accessToken);
+			setUser({
+				name: decodedToken.name,
+				email: decodedToken.email,
+				picture: decodedToken.picture,
+				accessToken: res.data.accessToken,
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
     let mock;
 
     beforeAll(() => {
@@ -40,32 +71,47 @@ describe('DisplayList unit test', () => {
 
     test('module, university and course display correctly', async () => {
         const testList = {
+            author: 1,
             module: "LI Team Project",
             university: "University of Birmingham",
             course: "Computer Science BSc",
             description: "Test resource list",
             sections: []
         };
+        const testUser = {
+            _id: 1,
+            name: "testUser",
+            email: null,
+            picture: null,
+            lists: []
+        }
 
         jest.spyOn(Router, 'useParams').mockReturnValue({ id: '1234' });
         mock.onGet("/api/list/find/1234").reply(200, testList);
+        mock.onGet("/api/users/1").reply(200, testUser);
 
 
         // Doing it this way calls useEffect(). See: https://www.reactjunkie.com/test-react-use-effect-with-enzyme
         let wrapper;
         act(() => {
             wrapper = mount(
-                <MemoryRouter><DisplayList /></MemoryRouter>
+                <MemoryRouter>
+                    <UserContext.Provider value={{ user, setUser, autoLogin }}>
+						<DisplayList />
+                    </UserContext.Provider>
+                </MemoryRouter>
             );
         });
 
         // Need to wait for components to update. See: https://dev.to/il3ven/fix-warning-in-react-update-was-not-wrapped-in-act-bk6
         await waitFor(() => {
-            const moduleWrapper = wrapper.find({ className: "displayList" }).childAt(1);
-            const universityWrapper = wrapper.find({ className: "displayList" }).childAt(2);
-            const courseWrapper = wrapper.find({ className: "displayList" }).childAt(3);
-            const descriptionWrapper = wrapper.find({ className: "displayList" }).childAt(4);
+            const authorWrapper = wrapper.find({ className: "displayList" }).childAt(1);
+            const moduleWrapper = wrapper.find({ className: "displayList" }).childAt(2);
+            const universityWrapper = wrapper.find({ className: "displayList" }).childAt(3);
+            const courseWrapper = wrapper.find({ className: "displayList" }).childAt(4);
+            const descriptionWrapper = wrapper.find({ className: "displayList" }).childAt(5);
 
+            expect(authorWrapper.text()).toMatch(new RegExp(testUser.name));
             expect(moduleWrapper.text()).toMatch(new RegExp(testList.module));
             expect(universityWrapper.text()).toMatch(new RegExp(testList.university));
             expect(courseWrapper.text()).toMatch(new RegExp(testList.course));
@@ -77,6 +123,7 @@ describe('DisplayList unit test', () => {
 
     test('Populates with sections', async () => {
         const testList = {
+            author: 1,
             module: "Population Module",
             university: "University of Sections",
             course: "Section Testing Studies BSc",
@@ -92,15 +139,27 @@ describe('DisplayList unit test', () => {
                 }
             ]
         };
+        const testUser = {
+            _id: 1,
+            name: "testUser",
+            email: null,
+            picture: null,
+            lists: []
+        }
 
         jest.spyOn(Router, 'useParams').mockReturnValue({ id: '1234' });
         mock.onGet("/api/list/find/1234").reply(200, testList);
+        mock.onGet("/api/users/1").reply(200, testUser);
 
         // Doing it this way calls useEffect(). See: https://www.reactjunkie.com/test-react-use-effect-with-enzyme
         let wrapper;
         act(() => {
             wrapper = mount(
-                <MemoryRouter><DisplayList /></MemoryRouter>
+                <MemoryRouter>
+                    <UserContext.Provider value={{ user, setUser, autoLogin }}>
+						<DisplayList />
+                    </UserContext.Provider>
+                </MemoryRouter>
             );
         });
 
