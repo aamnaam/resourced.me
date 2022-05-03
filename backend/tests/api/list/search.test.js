@@ -3,7 +3,7 @@ const { app } = require('../../../app');
 const dbHandler = require('../../dbHandler');
 const fixtures = require('../../fixtures');
 const ResourceList = require('../../../models/listModel');
-
+const mongoose = require("mongoose");
 // supertest request agent
 const agent = request.agent(app);
 
@@ -17,6 +17,7 @@ describe('GET /api/list/search', () => {
 
         for (let i = 0; i < 5; i++) {
             const list = fixtures.validList;
+            list.author = new mongoose.Types.ObjectId();
             list.university = "Test University"; // What we're matching by
             list.module = "Test Module";
             list.course = "Test Course";

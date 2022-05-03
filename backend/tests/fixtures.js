@@ -1,6 +1,8 @@
 // This file contains constants useful for unit tests. e.g. example data that can be used for testing POST requests
+const mongoose = require("mongoose");
 
 module.exports.validList = {
+    "author": new mongoose.Types.ObjectId(),
     "module": "LI Team Project",
     "university": "University of Birmingham",
     "course": "Computer Science",
